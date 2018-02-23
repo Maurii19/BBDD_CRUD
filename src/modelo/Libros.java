@@ -1,10 +1,13 @@
 package modelo;
 
+import java.util.ArrayList;
+
 public class Libros {
 	
 	private int id;
 	private String titulo;
 	private String autor;
+	private ArrayList<Prestamo> prestamos;
 	
 	
 	
@@ -26,6 +29,8 @@ public class Libros {
 	public void setAutor(String autor) {
 		this.autor = autor;
 	}
+
+
 
 
 

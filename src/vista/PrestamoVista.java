@@ -4,9 +4,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Scanner;
 
 import modelo.LibroModelo;
@@ -20,6 +22,7 @@ public class PrestamoVista {
 	
 	static final int TOMAR_PRESTADO = 1;
 	static final int ENTREGAR = 2;
+	static final int LISTAR = 3;
 	static final int SALIR = 0;
 	
 
@@ -28,12 +31,13 @@ public class PrestamoVista {
 	public void menuPrestamo(){
 		int opcion;
 		Scanner lector = new Scanner(System.in);
-		
+		PrestamoModelo pm = new PrestamoModelo();
 		do{
 			
 			System.out.println("---Prestamos---");
 			System.out.println(TOMAR_PRESTADO + "- Tomar prestado un libro.");
 			System.out.println(ENTREGAR + "- Entregar un libro.");
+			System.out.println(LISTAR + "- Listar prestamos.");
 			System.out.println(SALIR + "- Finalizar el programa.");
 			opcion = Integer.parseInt(lector.nextLine());
 			
@@ -46,7 +50,12 @@ public class PrestamoVista {
 			case ENTREGAR:
 				entregarLibro(lector);
 				break;
+			
+			case LISTAR:
+				ArrayList<Prestamo> prestamos = pm.selectAll();
+				mostrarPrestamo(prestamos);
 				
+				break;
 			case SALIR:
 				
 				break;
@@ -75,8 +84,8 @@ public class PrestamoVista {
 			
 			//CREAR OBJETO PRESTAMO
 			Prestamo prestamo = new Prestamo();
-			prestamo.setIdLibro(libro.getId());
-			prestamo.setIdUsuario(usuario.getId());
+			prestamo.setLibro(libro);
+			prestamo.setUsuario(usuario);
 			
 			Date fechaPrestamo = new Date();
 			Date fechaLimite = new Date();
@@ -128,4 +137,26 @@ public class PrestamoVista {
 		
 		System.out.println("El libro " + libro.getTitulo() + " ha sido entregado.");
 	}
-}
+	
+	public void mostrarPrestamo(ArrayList<Prestamo> prestamos) {
+
+		Iterator<Prestamo> i = prestamos.iterator();
+		while(i.hasNext()){
+			Prestamo prestamo = i.next();
+			mostrarPrestamos(prestamo);
+		}
+	}
+	public void mostrarPrestamos(Prestamo prestamo) {
+
+			String entregado;
+			if(prestamo.isEntregado()){
+				entregado = "entregado";
+			}else{
+				entregado = "por entregar";
+			}
+			System.out.println("ID: " + prestamo.getId() + " TITULO: " + prestamo.getLibro().getTitulo() + " DNI: " + prestamo.getUsuario().getDni() + " Fecha prestamo: " + prestamo.getFechaPrestamo() + " Fecha Limite: " + prestamo.getFechaLimite() + " Entregado: " + entregado);
+			
+		}
+		
+	}
+

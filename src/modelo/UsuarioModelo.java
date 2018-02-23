@@ -47,19 +47,23 @@ public class UsuarioModelo extends Conector {
 	
 
 	public Usuario select(int id){	
+		PreparedStatement pst;
 		Usuario usuario = new Usuario();
 		try {
 			
-		
-		    	Statement st = super.conexion.prepareStatement("select * from usuarios");
-				ResultSet rs = st.executeQuery("select * from usuarios WHERE id="+id);
-		        usuario.setId(rs.getInt("id"));
-		        usuario.setNombre(rs.getString("nombre"));
-		        usuario.setApellido(rs.getString("apellido"));
-		        usuario.setEdad(rs.getInt("edad"));
-		        usuario.setDni(rs.getString("dni"));
-		        usuario.setFecha_nacimiento(rs.getDate("fecha_nacimiento"));
-	
+		    	pst = super.conexion.prepareStatement("select * from usuarios where id=?");
+				pst.setInt(1, id);
+				ResultSet rst = pst.executeQuery();
+		    	if(rst.next()){
+		        usuario.setId(rst.getInt("id"));
+		        usuario.setNombre(rst.getString("nombre"));
+		        usuario.setApellido(rst.getString("apellido"));
+		        usuario.setEdad(rst.getInt("edad"));
+		        usuario.setDni(rst.getString("dni"));
+		        usuario.setFecha_nacimiento(rst.getDate("fecha_nacimiento"));
+		        
+		        return usuario;
+		    	}
 		      
 
 		} catch (SQLException e) {

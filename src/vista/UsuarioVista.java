@@ -9,6 +9,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
+
+import Comparators.IdComparator;
+import Comparators.IdUsuarioComparator;
+import Comparators.NombreComparator;
+
 import java.util.Date;
 
 import modelo.Usuario;
@@ -46,7 +51,11 @@ public class UsuarioVista {
 
 			case LISTAR:
 				ArrayList<Usuario> usuarios = usuarioModelo.selectAll();
-				this.mostarUsuarios(usuarios);
+				NombreComparator d = new NombreComparator();
+				usuarios.sort(d);
+				IdUsuarioComparator id = new IdUsuarioComparator();
+				usuarios.sort(id);
+				this.mostrarUsuarios(usuarios);
 				break;
 				
 			case SALIR:
@@ -100,15 +109,15 @@ public class UsuarioVista {
 		return usuario;
 	}
 
-	public void mostarUsuarios(ArrayList<Usuario> usuarios) {
+	public void mostrarUsuarios(ArrayList<Usuario> usuarios) {
 
 		Iterator<Usuario> i = usuarios.iterator();
 		while(i.hasNext()){
 			Usuario usuario = i.next();
-			mostarUsuario(usuario);
+			mostrarUsuario(usuario);
 		}
 	}
-	public void mostarUsuario(Usuario usuario) {
+	public void mostrarUsuario(Usuario usuario) {
 		java.util.Date fecha_nacimiento = usuario.getFecha_nacimiento();
 		String fecha="";
 		if(fecha_nacimiento == null){

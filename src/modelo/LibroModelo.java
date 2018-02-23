@@ -35,14 +35,19 @@ public class LibroModelo extends Conector {
 	//Nos devuelve los registros por id del libro
 	public Libros select(int id){	
 		Libros libro = new Libros();
+		PreparedStatement pst;
 		try {
-		    Statement st = super.conexion.prepareStatement("select * from libros");
-			ResultSet rs = st.executeQuery("select * from libros WHERE id="+id);
+		     pst = super.conexion.prepareStatement("select * from libros where id=?");
+		     pst.setInt(1, id);
+			ResultSet rs = pst.executeQuery();
+			
+			if(rs.next()){
 		    libro.setId(rs.getInt("id"));
 		    libro.setTitulo(rs.getString("titulo"));
 		    libro.setAutor(rs.getString("autor"));
-
-
+		   
+		    return libro;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -58,7 +63,6 @@ public class LibroModelo extends Conector {
 			pst.setString(1, titulo);
 			ResultSet rst = pst.executeQuery();
 			if(rst.next()){
-				
 				libro.setId(rst.getInt("id"));
 				libro.setTitulo(rst.getString("titulo"));
 				libro.setAutor(rst.getString("autor"));

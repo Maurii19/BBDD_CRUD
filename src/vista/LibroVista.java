@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Scanner;
+
+import Comparators.IdComparator;
 import modelo.Libros;
 import modelo.LibroModelo;
 import modelo.Usuario;
@@ -34,6 +36,8 @@ public class LibroVista extends Libros {
 			
 			case LISTAR:
 				ArrayList<Libros> libros = libroModelo.selectAll();
+				IdComparator d = new IdComparator();
+				libros.sort(d);
 				this.mostarLibros(libros);
 				break;
 			
